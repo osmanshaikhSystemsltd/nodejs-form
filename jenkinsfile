@@ -1,1 +1,22 @@
-// jenkinsfile
+pipeline{
+    agent "built-in"
+    tools {nodejs "self-nodejs"}
+    stages{
+        stage("clear workspace"){
+            steps{
+                // remove workdirectory data
+                sh 'rm -rf *'
+            }
+        }
+        stage("checkout data from github"){
+            steps{
+                checkout([$class: 'GitSCM', branches: [[name: '*/qa']], extensions: [], userRemoteConfigs: [[credentialsId: 'github-shaikh', url: 'https://github.com/osmanshaikhSystemsltd/nodejs-form.git']]])
+            }
+        }
+        stage("install nodeJS"){
+            steps{
+                sh 'npm install'
+            }
+        }
+    }
+}
